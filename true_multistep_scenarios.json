@@ -1,0 +1,7 @@
+[
+  {"health": 10, "enemyNearby": true, "hasPotion": false, "treasureThreatLevel": "high", "stamina": 5, "inSafeZone": false},
+  {"health": 15, "enemyNearby": true, "hasPotion": false, "treasureThreatLevel": "medium", "stamina": 3, "inSafeZone": false},
+  {"health": 5, "enemyNearby": true, "hasPotion": false, "treasureThreatLevel": "high", "stamina": 2, "inSafeZone": false},
+  {"health": 10, "enemyNearby": false, "hasPotion": false, "treasureThreatLevel": "medium", "stamina": 4, "inSafeZone": false},
+  {"health": 10, "enemyNearby": true, "hasPotion": false, "treasureThreatLevel": "high", "stamina": 5, "inSafeZone": false}
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "health": 50,
+    "enemyNearby": true,
+    "hasPotion": false,
+    "treasureThreatLevel": "high",
+    "stamina": 10,
+    "inSafeZone": false,
+    "hell_mode": true
+  }
+]
