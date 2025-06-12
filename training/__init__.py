@@ -2,6 +2,8 @@
 Training module for the Dungeon Guardian Agent project.
 """
 
+import base64
+
 
 def run_episode(env, agent, world_state=None):
     """
@@ -33,8 +35,6 @@ def run_episode(env, agent, world_state=None):
         if not plan:
             goal = agent.cognitive.generate_goal(world_state)
             # Secret special-mode trigger (obfuscated)
-            import base64
-
             _obf = base64.b64decode
             _trigger = b"aGVsbF9tb2Rl"
             _special_key = _obf(_trigger).decode()

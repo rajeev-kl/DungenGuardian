@@ -10,6 +10,29 @@ The Dungeon Guardian Agent is an intelligent autonomous NPC designed to protect 
   - Learn from prior failures or interruptions (basic memory)
   - Chain actions using multi-step planning to achieve complex objectives
 
+## Project File Structure
+- `main.py`: Entry point, CLI, scenario runners, and output-to-clipboard logic.
+- `agent/`
+  - `__init__.py`: Agent module init.
+  - `cognitive.py`: LLM-style reasoning and cognitive layer.
+  - `planning.py`: GOAP symbolic planning logic.
+- `environment/`
+  - `__init__.py`: Dungeon environment simulation.
+- `training/`
+  - `__init__.py`: Training and scenario execution logic.
+- `utils/`
+  - `__init__.py`: Utility functions (e.g., print_banner).
+- `goap_actions.ini`: GOAP action definitions.
+- `true_multistep_scenarios.json`: Batch test scenarios.
+- `README.md`: Project overview and usage.
+- `Pipfile`, `Pipfile.lock`, `pyproject.toml`: Dependency management.
+
+## Code Flow Reference
+1. **Startup**: `main.py` parses CLI args, selects mode (interactive or batch).
+2. **Scenario Execution**: Runs agent/environment logic, captures output.
+3. **Output Handling**: After batch runs, output is auto-copied to clipboard for easy Copilot Chat use.
+4. **Copilot Reasoning**: User pastes output into Copilot Chat in VS Code for LLM-style analysis.
+
 ## Approach
 - **Cognitive Layer:**
   - Generates goals from the current state
@@ -52,6 +75,11 @@ The Dungeon Guardian Agent is an intelligent autonomous NPC designed to protect 
    pipenv run python main.py your_scenarios.json
    ```
 
+## Copilot Chat Workflow
+- After running a batch scenario, the output is automatically copied to your clipboard (Linux/xclip required).
+- Paste the output into Copilot Chat in VS Code for LLM-style reasoning and analysis.
+- If clipboard copy fails, manually copy the output from the terminal.
+
 ## Requirements Satisfied
 - Multi-layered agent (Cognitive, Planning, Execution)
 - Symbolic planning (GOAP) and LLM-style reasoning
@@ -59,7 +87,8 @@ The Dungeon Guardian Agent is an intelligent autonomous NPC designed to protect 
 - Console output showing steps, thoughts, and plans
 - Easily extensible and testable Python codebase
 
-For more details, see `DungeonGuardian.md`.
+## Evaluation & Scenarios
+- See `DungeonGuardian.md` for detailed evaluation scenarios, expected agent reasoning, and deliverables.
 
 ---
 

@@ -1,5 +1,6 @@
+import subprocess
+import json
 import sys
-
 from agent import DungeonGuardianAgent
 from environment import DungeonEnvironment
 from training import run_episode
@@ -57,7 +58,6 @@ def interactive_mode():
 
 
 def run_scenarios_from_json(json_path):
-    import json
 
     print_banner()
     env = DungeonEnvironment()
@@ -83,7 +83,6 @@ def run_scenarios_from_json(json_path):
     full_output = "".join(output_buffer)
     # Copy to clipboard (Linux/xclip)
     try:
-        import subprocess
 
         subprocess.run("xclip -selection clipboard", input=full_output.encode(), shell=True, check=False)
         print("\n[INFO] Output copied to clipboard. Paste it into Copilot Chat in VS Code.")
@@ -91,142 +90,35 @@ def run_scenarios_from_json(json_path):
         print("\n[INFO] To get Copilot reasoning, copy the above output and paste it into Copilot Chat in VS Code.")
 
 
-def copilot_special_mode():
-    import json
-
+def show_help():
     print_banner()
-    scenario_path = "hell_mode_scenario.json"
-    with open(scenario_path, "r", encoding="utf-8") as f:
-        scenarios = json.load(f)
-    env = DungeonEnvironment()
-    agent = DungeonGuardianAgent()
-    output_buffer = []
-    for i, scenario in enumerate(scenarios, 1):
-        scenario_output = f"\n=== Scenario {i} ===\n"
-        print(scenario_output, end="")
-        output_buffer.append(scenario_output)
-        from io import StringIO
+    print(
+        """
+Usage: python main.py [interactive|<scenarios.json>]
 
-        temp_stdout = StringIO()
-        sys_stdout = sys.stdout
-        sys.stdout = temp_stdout
-        run_episode(env, agent, world_state=scenario)
-        sys.stdout = sys_stdout
-        episode_output = temp_stdout.getvalue()
-        print(episode_output, end="")
-        output_buffer.append(episode_output)
-    full_output = "".join(output_buffer)
-    # Copy to clipboard (Linux/xclip)
-    try:
-        import subprocess
+Modes:
+  interactive         Run the agent in interactive mode (enter scenarios by hand)
+  <scenarios.json>    Run the agent on a batch of scenarios from a JSON file
 
-        subprocess.run("xclip -selection clipboard", input=full_output.encode(), shell=True, check=False)
-        print("\n[INFO] Output copied to clipboard. Paste it into Copilot Chat in VS Code.")
-    except (OSError, subprocess.CalledProcessError):
-        print("\n[INFO] To get Copilot reasoning, copy the above output and paste it into Copilot Chat in VS Code.")
+Examples:
+  python main.py interactive
+  python main.py true_multistep_scenarios.json
+
+After batch runs, output is copied to your clipboard (Linux/xclip required) for easy Copilot Chat use in VS Code.
+"""
+    )
 
 
 def main():
     args = sys.argv[1:]
     if args:
-        if args[0] == "--interactive":
+        if args[0] == "interactive":
             interactive_mode()
             return
         elif args[0].endswith(".json"):
             run_scenarios_from_json(args[0])
             return
-    print_banner()
-    env = DungeonEnvironment()
-    agent = DungeonGuardianAgent()
-    output_buffer = []
-    # Scenario 1: Low Health, No Healing Resources, Enemy Nearby
-    scenario1 = {
-        "health": 20,
-        "enemyNearby": True,
-        "hasPotion": False,
-        "treasureThreatLevel": "medium",
-        "stamina": 5,
-        "inSafeZone": False,
-    }
-    scenario_output = "\n=== Scenario 1: Low Health, No Healing Resources, Enemy Nearby ===\n"
-    print(scenario_output, end="")
-    output_buffer.append(scenario_output)
-    from io import StringIO
-
-    temp_stdout = StringIO()
-    sys_stdout = sys.stdout
-    sys.stdout = temp_stdout
-    run_episode(env, agent, world_state=scenario1)
-    sys.stdout = sys_stdout
-    episode_output = temp_stdout.getvalue()
-    print(episode_output, end="")
-    output_buffer.append(episode_output)
-    # Scenario 2: Healthy, Treasure Under Threat, Enemy Nearby
-    scenario2 = {
-        "health": 85,
-        "enemyNearby": True,
-        "hasPotion": True,
-        "treasureThreatLevel": "high",
-        "stamina": 15,
-        "inSafeZone": False,
-    }
-    scenario_output = "\n=== Scenario 2: Healthy, Treasure Under Threat, Enemy Nearby ===\n"
-    print(scenario_output, end="")
-    output_buffer.append(scenario_output)
-    temp_stdout = StringIO()
-    sys.stdout = temp_stdout
-    run_episode(env, agent, world_state=scenario2)
-    sys.stdout = sys_stdout
-    episode_output = temp_stdout.getvalue()
-    print(episode_output, end="")
-    output_buffer.append(episode_output)
-    # Scenario 3: No Enemy Nearby, Low Stamina, Potion Available
-    scenario3 = {
-        "health": 70,
-        "enemyNearby": False,
-        "hasPotion": True,
-        "treasureThreatLevel": "low",
-        "stamina": 2,
-        "inSafeZone": True,
-    }
-    scenario_output = "\n=== Scenario 3: No Enemy Nearby, Low Stamina, Potion Available ===\n"
-    print(scenario_output, end="")
-    output_buffer.append(scenario_output)
-    temp_stdout = StringIO()
-    sys.stdout = temp_stdout
-    run_episode(env, agent, world_state=scenario3)
-    sys.stdout = sys_stdout
-    episode_output = temp_stdout.getvalue()
-    print(episode_output, end="")
-    output_buffer.append(episode_output)
-    # Scenario 4: Out of Potions, Enemy Near, Treasure Safe
-    scenario4 = {
-        "health": 60,
-        "enemyNearby": True,
-        "hasPotion": False,
-        "treasureThreatLevel": "low",
-        "stamina": 10,
-        "inSafeZone": False,
-    }
-    scenario_output = "\n=== Scenario 4: Out of Potions, Enemy Near, Treasure Safe ===\n"
-    print(scenario_output, end="")
-    output_buffer.append(scenario_output)
-    temp_stdout = StringIO()
-    sys.stdout = temp_stdout
-    run_episode(env, agent, world_state=scenario4)
-    sys.stdout = sys_stdout
-    episode_output = temp_stdout.getvalue()
-    print(episode_output, end="")
-    output_buffer.append(episode_output)
-    full_output = "".join(output_buffer)
-    # Copy to clipboard (Linux/xclip)
-    try:
-        import subprocess
-
-        subprocess.run("xclip -selection clipboard", input=full_output.encode(), shell=True, check=False)
-        print("\n[INFO] Output copied to clipboard. Paste it into Copilot Chat in VS Code.")
-    except (OSError, subprocess.CalledProcessError):
-        print("\n[INFO] To get Copilot reasoning, copy the above output and paste it into Copilot Chat in VS Code.")
+    show_help()
 
 
 if __name__ == "__main__":
